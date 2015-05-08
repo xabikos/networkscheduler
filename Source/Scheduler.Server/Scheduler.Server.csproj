@@ -69,8 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MachineCommandType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IScheduleCommandsService.cs" />
+    <Compile Include="MachineCommand.cs" />
+    <Compile Include="SignalR\ScheduleCommandsHub.cs" />
     <Compile Include="SignalR\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
