@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Scheduler.Common.ClientDevice>
+
+@{
     ViewBag.Title = "Clients management";
 }
 
@@ -21,7 +23,16 @@
         </tr>
     </thead>
     <tbody>
-        
+        @foreach (var client in Model)
+        {
+            <tr>
+                <td></td>
+                <td>@client.Name</td>
+                <td>@client.IpAddress</td>
+                <td>Getting Status</td>
+                <td></td>
+            </tr>
+        }
     </tbody>
 </table>
 
