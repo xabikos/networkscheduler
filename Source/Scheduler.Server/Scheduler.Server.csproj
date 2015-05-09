@@ -87,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IScheduleCommandsService.cs" />
     <Compile Include="MachineCommand.cs" />
+    <Compile Include="SignalR\ManagementHub.cs" />
     <Compile Include="SignalR\ClientsHub.cs" />
     <Compile Include="SignalR\ScheduleCommandsHub.cs" />
     <Compile Include="SignalR\Startup.cs" />

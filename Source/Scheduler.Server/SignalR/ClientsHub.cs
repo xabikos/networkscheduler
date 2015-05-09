@@ -15,6 +15,9 @@ namespace Scheduler.Server.SignalR
         private static readonly Lazy<IConnectedClientsRegistry> ClientsRegistry =
             new Lazy<IConnectedClientsRegistry>(() => new ConnectedClientsRegistry());
 
+        private readonly Lazy<IHubContext> _context =
+            new Lazy<IHubContext>(() => GlobalHost.ConnectionManager.GetHubContext<ManagementHub>());
+
         public override Task OnConnected()
         {
             var clientName = Context.Headers["authToken"];
@@ -32,6 +35,7 @@ namespace Scheduler.Server.SignalR
                     };
                     dbContext.Clients.Add(client);
                     dbContext.SaveChanges();
+                    _context.Value.Clients.All.clientAdded(client);
                 }
                 ClientsRegistry.Value.RegisterClient(client, Context.ConnectionId);
             }

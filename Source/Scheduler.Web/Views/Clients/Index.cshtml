@@ -1,17 +1,16 @@
-﻿@using Microsoft.Ajax.Utilities
-@model IEnumerable<Scheduler.Common.ClientDevice>
+﻿@model IEnumerable<Scheduler.Common.ClientDevice>
 
 @{
     ViewBag.Title = "Clients management";
 }
 
-<table>
+<table id="clients">
     <tr>
         <th>
             Index
         </th>
         <th>
-            First Name
+            Name
         </th>
         <th>
             IP Address
@@ -37,3 +36,27 @@
         </tr>
     }
 </table>
+
+@section scripts{
+<script type="text/javascript">
+    $(function() {
+        var connection = $.hubConnection('http://localhost:8080/');
+        var proxy = connection.createHubProxy('ManagementHub');
+        
+        proxy.on('clientAdded', function (clientData) {
+            $('#clients').append('<tr><td></td><td>' + clientData.name + '</td><td>' + clientData.ipAddress + '</td><td></td></tr>');
+        });
+
+        connection.start()
+            .done(function() {
+                
+            })
+            .fail(function() { alert("Could not Connect!"); });
+
+        $("#broadcast").click(function() {
+            proxy.invoke('Publish', $("#dataToSend").val(), 'Product');
+        });
+
+    });
+</script>
+}
