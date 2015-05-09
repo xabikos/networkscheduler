@@ -1,8 +1,39 @@
-﻿@model dynamic
+﻿@using Microsoft.Ajax.Utilities
+@model IEnumerable<Scheduler.Common.ClientDevice>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewBag.Title = "Clients management";
 }
 
-<h2>title</h2>
+<table>
+    <tr>
+        <th>
+            Index
+        </th>
+        <th>
+            First Name
+        </th>
+        <th>
+            IP Address
+        </th>
+        <th></th>
+    </tr>
+    @{ var coutner = 0;}
+    @foreach (var client in Model)
+    {
+        <tr>
+            <td>@{ ++coutner;}</td>
+            <td>
+                @Html.DisplayFor(modelItem => client.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => client.IpAddress)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = client.Name }) |
+                @Html.ActionLink("Details", "Details", new { id = client.Name }) |
+                @Html.ActionLink("Delete", "Delete", new { id = client.Name })
+            </td>
+        </tr>
+    }
+</table>

@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Scheduler.Common.DataAccess;
 
 namespace Scheduler.Web.Controllers
 {
@@ -11,7 +12,12 @@ namespace Scheduler.Web.Controllers
         // GET: Clients
         public ActionResult Index()
         {
-            return View();
+            using (var dbContext = new SchedulerContext())
+            {
+                var test = dbContext.ConnectedClients.ToList();
+                //var connectedClients = await dbContext.ConnectedClients.ToListAsync();
+                return View();
+            }
         }
     }
 }
