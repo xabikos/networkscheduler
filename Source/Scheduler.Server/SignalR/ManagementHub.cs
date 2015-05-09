@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNet.SignalR;
 using Scheduler.Common;
+using Scheduler.Server.Services;
 
 namespace Scheduler.Server.SignalR
 {

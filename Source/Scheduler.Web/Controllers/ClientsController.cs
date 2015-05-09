@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Scheduler.Common;
@@ -8,11 +9,8 @@ namespace Scheduler.Web.Controllers
 {
     public class ClientsController : Controller
     {
-        private readonly IConnectedClientsRegistry _clientsRegistry;
-
         public ClientsController()
         {
-            _clientsRegistry = new ConnectedClientsRegistry();
             // HACK in order to trigger migration of the database
             using (var context = new SchedulerContext())
             {
@@ -23,7 +21,7 @@ namespace Scheduler.Web.Controllers
         // GET: Clients
         public ActionResult Index()
         {
-            return View(_clientsRegistry.GetConnectedClients().Select(cc => cc.Client));
+            return View();
         }
     }
 }
