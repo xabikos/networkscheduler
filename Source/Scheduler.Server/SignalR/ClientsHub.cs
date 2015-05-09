@@ -11,16 +11,20 @@ namespace Scheduler.Server.SignalR
     /// </summary>
     public class ClientsHub : Hub
     {
-        
-        private static readonly Lazy<IClientsManager> ClientsManager =
-            new Lazy<IClientsManager>(() => new ClientsManager());
+
+        private readonly IClientsManager _clientsManager;
+
+        public ClientsHub(IClientsManager clientsManager)
+        {
+            _clientsManager = clientsManager;
+        }
 
         public override Task OnConnected()
         {
             var clientName = Context.Headers["authToken"];
             var clientAddress = Context.Headers["ipAddress"];
 
-            ClientsManager.Value.ClientConnected(new ClientDevice
+            _clientsManager.ClientConnected(new ClientDevice
             {
                 Name = clientName,
                 IpAddress = clientAddress
@@ -31,7 +35,7 @@ namespace Scheduler.Server.SignalR
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            ClientsManager.Value.ClientDisconected(Context.ConnectionId);
+            _clientsManager.ClientDisconected(Context.ConnectionId);
             
             return base.OnDisconnected(stopCalled);
 

@@ -19,6 +19,11 @@ namespace Scheduler.Web
             // This is an extension method from the integration package as well.
             container.RegisterMvcIntegratedFilterProvider();
 
+            // This is an extension method from SimpleInjector.Packaging that will scan
+            // all assemblies in the project for IPackage implementations and allow
+            // them to register objects in the container
+            container.RegisterPackages();
+
             container.Verify();
 
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
