@@ -11,11 +11,11 @@ namespace Scheduler.Common
         /// The id of the entity
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
-        /// The client's Id
+        /// The connection Id between the server and the client
         /// </summary>
-        public int ClientId { get; set; }
+        public string ConnectionId { get; set; }
         
         /// <summary>
         /// The client

@@ -46,8 +46,8 @@
     <Compile Include="ConnectedClient.cs" />
     <Compile Include="DataAccess\Configuration.cs" />
     <Compile Include="DataAccess\MapConfigurations\ClientDeviceConfiguration.cs" />
-    <Compile Include="DataAccess\MapConfigurations\ConnectedClientConfiguration.cs" />
     <Compile Include="DataAccess\SchedulerContext.cs" />
+    <Compile Include="IConnectedClientsRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

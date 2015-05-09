@@ -1,23 +1,29 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
+using Scheduler.Common;
 using Scheduler.Common.DataAccess;
 
 namespace Scheduler.Web.Controllers
 {
     public class ClientsController : Controller
     {
+        private readonly IConnectedClientsRegistry _clientsRegistry;
+
+        public ClientsController()
+        {
+            _clientsRegistry = new ConnectedClientsRegistry();
+            // HACK in order to trigger migration of the database
+            using (var context = new SchedulerContext())
+            {
+                var dummyAccess = context.Clients.ToList();
+            }
+        }
+
         // GET: Clients
         public ActionResult Index()
         {
-            using (var dbContext = new SchedulerContext())
-            {
-                var test = dbContext.ConnectedClients.ToList();
-                //var connectedClients = await dbContext.ConnectedClients.ToListAsync();
-                return View();
-            }
+            return View(_clientsRegistry.GetConnectedClients().Select(cc => cc.Client));
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
@@ -11,14 +13,21 @@ namespace Scheduler.Client
     class Program
     {
         static void Main(string[] args)
-        {
+        {            
             //Set connection
             var connection = new HubConnection("http://localhost:8080/");
             //Make proxy to hub based on hub name on server
             var myHub = connection.CreateHubProxy("ClientsHub");
             connection.Headers.Add("authToken", Environment.MachineName);
+            //connection.Headers.Add("authToken", Guid.NewGuid().ToString());
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                var host = Dns.GetHostEntry(Dns.GetHostName());
+                connection.Headers.Add("ipAddress",
+                    host.AddressList.First(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString());
+            }
+            
             //Start connection
-
             connection.Start().ContinueWith(task =>
             {
                 if (task.IsFaulted)

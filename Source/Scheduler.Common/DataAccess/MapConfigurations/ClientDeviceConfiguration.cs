@@ -11,7 +11,7 @@ namespace Scheduler.Common.DataAccess.MapConfigurations
     {
         public ClientDeviceConfiguration()
         {
-            //ToTable("Clients");
+            ToTable("Clients");
             
             Property(cd => cd.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(cd => cd.Name).IsRequired().HasMaxLength(255);
