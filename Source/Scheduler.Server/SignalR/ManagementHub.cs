@@ -19,5 +19,11 @@ namespace Scheduler.Server.SignalR
             Clients.All.clientAdded(client);
         }
 
+
+        public void ClientDisconnected(string clientName)
+        {
+            Clients.All.clientDisconected(clientName);
+        }
+
     }
 }
