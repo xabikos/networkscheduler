@@ -25,6 +25,7 @@ namespace Scheduler.Web.Controllers
 
         public ActionResult Details(string id)
         {
+            ViewBag.AvailableCommands = _schedulerContext.Commands;
             return View(_schedulerContext.Clients.FirstOrDefault(c => c.Name == id));
         }
 
