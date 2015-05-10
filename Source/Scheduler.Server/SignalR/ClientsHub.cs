@@ -53,7 +53,7 @@ namespace Scheduler.Server.SignalR
                 context.CommandsExecutuions.Add(commandExecution);
                 context.SaveChanges();
                 Clients.Client(connectionId).executeCommand(command);
-                Clients.Caller.commandExecutionInfo("started", commandExecution);
+                Clients.Group(Resources.WepAppClientsGroupName).commandExecutionInfo("started", commandExecution);
             }
         }
 
