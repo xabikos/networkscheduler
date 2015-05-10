@@ -15,31 +15,31 @@ namespace Scheduler.Server.SignalR
         {
             app.UseCors(CorsOptions.AllowAll);
 
-            var container = new Container();
+            //var container = new Container();
 
-            container.Register<IConnectedClientsRegistry, ConnectedClientsRegistry>(Lifestyle.Singleton);
-            container.Register<IClientsManager, ClientsManager>(Lifestyle.Transient);
-            container.Register<ClientsHub>(() => new ClientsHub(container.GetInstance<IClientsManager>()));
-            container.Register<IHubContext>(
-                () => container.GetInstance<IConnectionManager>().GetHubContext<ManagementHub>());
+            //container.Register<IConnectedClientsRegistry, ConnectedClientsRegistry>(Lifestyle.Singleton);
+            //container.Register<IClientsManager, ClientsManager>(Lifestyle.Transient);
+            //container.Register<ClientsHub>(() => new ClientsHub(container.GetInstance<IClientsManager>()));
+            //container.Register<IHubContext>(
+            //    () => container.GetInstance<IConnectionManager>().GetHubContext<ManagementHub>());
             //container.Register<ManagementHub>(
             //    () => new ManagementHub(container.GetInstance<IConnectedClientsRegistry>()));
             
             // This is an extension method from SimpleInjector.Packaging that will scan
             // all assemblies in the project for IPackage implementations and allow
             // them to register objects in the container
-            container.RegisterPackages();
+            //container.RegisterPackages();
 
-            container.Verify();
+            //container.Verify();
 
-            var config = new HubConfiguration
-            {
-                Resolver = new SignalRSimpleInjectorDependencyResolver(container)
-            };
+            //var config = new HubConfiguration
+            //{
+            //    Resolver = new SignalRSimpleInjectorDependencyResolver(container)
+            //};
             //var activator = new SimpleInjectorHubActivator(container);
             //GlobalHost.DependencyResolver.Register(typeof(IHubActivator), () => activator);
             
-            app.MapSignalR(config);
+            app.MapSignalR();
         }
     }
 }

@@ -12,16 +12,18 @@ namespace Scheduler.Server.SignalR
     public class ManagementHub : Hub
     {
 
-        private readonly IConnectedClientsRegistry _connectedClientsRegistry;
+        private readonly Lazy<IConnectedClientsRegistry> _connectedClientsRegistry =
+            new Lazy<IConnectedClientsRegistry>(() => new ConnectedClientsRegistry());
+        //private readonly IConnectedClientsRegistry _connectedClientsRegistry;
 
-        public ManagementHub(IConnectedClientsRegistry connectedClientsRegistry)
-        {
-            _connectedClientsRegistry = connectedClientsRegistry;
-        }
+        //public ManagementHub()
+        //{
+        //    _connectedClientsRegistry = connectedClientsRegistry;
+        //}
 
         public void GetConnectedClients()
         {
-            var enumerable = _connectedClientsRegistry.GetConnectedClients().Select(cc => cc.Client.Name);
+            var enumerable = _connectedClientsRegistry.Value.GetConnectedClients().Select(cc => cc.Client.Name);
             Clients.Caller.connectedClients(enumerable);
         }
 
