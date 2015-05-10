@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Scheduler.Common;
 
@@ -10,13 +8,14 @@ namespace Scheduler.Client
     public class CommandExecutor : ICommandExecutor
     {
 
-        public CommandExecution ExecuteCommand(CommandExecution commandExecution)
+        public async Task<CommandExecution> ExecuteCommandAsync(CommandExecution commandExecution)
         {
             commandExecution.StartExecution = DateTime.UtcNow;
 
             var rnd = new Random();
             commandExecution.Result = (ExecutionResult)rnd.Next(0, 2);
-            Task.Delay(rnd.Next(1000, 5000)).Wait();
+            // Virtual command execution time
+            await Task.Delay(rnd.Next(1000, 5000));
 
             if (ShouldSimulateException())
             {

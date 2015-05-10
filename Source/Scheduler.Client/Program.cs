@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Scheduler.Common;
 using Scheduler.Common.Logging;
@@ -59,7 +58,7 @@ namespace Scheduler.Client
         /// Helper method that simulates a command execution on a client machine and produces random success or error results
         /// In general async void methods is not a good idea but here is used like event handler
         /// </summary>
-        private static void SimulateCommandExecution(CommandExecution commandExecution)
+        private static async void SimulateCommandExecution(CommandExecution commandExecution)
         {
             Log(LogLevel.Verbose, commandExecution.Id,
                 string.Format("Start Executing Command {0} on client with name: {1} at {2}",
@@ -67,9 +66,9 @@ namespace Scheduler.Client
 
             try
             {
-                commandExecution = _commandExecutor.ExecuteCommand(commandExecution);
+                commandExecution = await _commandExecutor.ExecuteCommandAsync(commandExecution);
                 
-                _clientsHub.Invoke<CommandExecution>("ReportCommandResult", commandExecution).ContinueWith(task =>
+                await _clientsHub.Invoke<CommandExecution>("ReportCommandResult", commandExecution).ContinueWith(task =>
                 {
                     if (task.IsFaulted)
                     {
@@ -96,14 +95,7 @@ namespace Scheduler.Client
                         ex.Message, commandExecution.Command.Name));
             }
         }
-
-        private static bool ShouldSimulateException()
-        {
-            var secondsToSimulateException = new[] { 2, 5, 7 };
-            var value = DateTime.UtcNow.Second%10;
-            return secondsToSimulateException.Contains(value);
-        }
-
+        
         private static void Log(LogLevel level, int executionId, string message)
         {
             _clientsHub.Invoke<ExecutionLogEntry>("Log",

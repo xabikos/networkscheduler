@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Scheduler.Common;
 
 namespace Scheduler.Client
@@ -11,6 +12,6 @@ namespace Scheduler.Client
         /// <summary>
         /// Executes the supplied command and returns the updated version of it.
         /// </summary>
-        CommandExecution ExecuteCommand(CommandExecution commandExecution);
+        Task<CommandExecution> ExecuteCommandAsync(CommandExecution commandExecution);
     }
 }
