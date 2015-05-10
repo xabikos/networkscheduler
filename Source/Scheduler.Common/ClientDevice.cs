@@ -30,7 +30,7 @@ namespace Scheduler.Common
         /// <summary>
         /// All the commands have been executed on the device
         /// </summary>
-        public ICollection<CommandExecution> Executions { get; set; }
+        public virtual ICollection<CommandExecution> Executions { get; set; }
 
     }
 }

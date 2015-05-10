@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using Scheduler.Common.Logging;
 
 
 namespace Scheduler.Common.DataAccess
@@ -17,8 +18,7 @@ namespace Scheduler.Common.DataAccess
         public DbSet<ClientDevice> Clients { get; set; }
         public DbSet<MachineCommand> Commands { get; set; }
         public DbSet<CommandExecution> CommandsExecutuions { get; set; }
-
-        
+        public DbSet<LogEntry> LogEntries { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

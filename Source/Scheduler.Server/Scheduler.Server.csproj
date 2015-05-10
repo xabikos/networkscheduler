@@ -96,7 +96,7 @@
     <Compile Include="Services\ConnectedClientsRegistry.cs" />
     <Compile Include="Services\IClientsManager.cs" />
     <Compile Include="Services\IConnectedClientsRegistry.cs" />
-    <Compile Include="Services\IScheduleCommandsService.cs" />
+    <Compile Include="Services\ServiceLogger.cs" />
     <Compile Include="SignalR\DependencyContext.cs" />
     <Compile Include="SignalR\ManagementHub.cs" />
     <Compile Include="SignalR\ClientsHub.cs" />

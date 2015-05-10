@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Scheduler.Common;
+using Scheduler.Common.Logging;
 
 namespace Scheduler.Client
 {
@@ -57,28 +58,65 @@ namespace Scheduler.Client
         /// </summary>
         private static void SimulateCommandExecution(CommandExecution commandExecution)
         {
-            commandExecution.StartExecution = DateTime.UtcNow;
+            var startExecution = DateTime.UtcNow;
 
-            var rnd = new Random();
-            commandExecution.Result = (ExecutionResult) rnd.Next(0, 2);
-            Task.Delay(rnd.Next(1000, 5000)).Wait();
-            
-            commandExecution.FinishExecution = DateTime.UtcNow;
-            _clientsHub.Invoke<CommandExecution>("ReportCommandResult", commandExecution).ContinueWith(task =>
+            Log(LogLevel.Verbose, commandExecution.Id,
+                string.Format("Start Executing Command {0} on client with name: {1} at {2}",
+                    commandExecution.Command.Name, Environment.MachineName, startExecution));
+
+            try
             {
-                if (task.IsFaulted)
+                commandExecution.StartExecution = startExecution;
+
+                var rnd = new Random();
+                commandExecution.Result = (ExecutionResult) rnd.Next(0, 2);
+                Task.Delay(rnd.Next(1000, 5000)).Wait();
+
+                if (ShouldSimulateException())
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Failed to update server for command execution:");
+                    throw new InvalidOperationException("An exception raised during the command execution");  
                 }
-                else
+
+                commandExecution.FinishExecution = DateTime.UtcNow;
+                _clientsHub.Invoke<CommandExecution>("ReportCommandResult", commandExecution).ContinueWith(task =>
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Successfully update server for command execution:");
-                }
-                PrintCommandExecutionDetails(commandExecution);
-                Console.ResetColor();
-            });
+                    if (task.IsFaulted)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Failed to update server for command execution:");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Successfully update server for command execution:");
+                    }
+                    PrintCommandExecutionDetails(commandExecution);
+                    Console.ResetColor();
+                });
+                
+                Log(LogLevel.Information, commandExecution.Id,
+                     string.Format("Finished Executing Command {0} on client with name: {1} at {2}",
+                    commandExecution.Command.Name, Environment.MachineName, DateTime.UtcNow));
+            }
+            catch (InvalidOperationException ex)
+            {
+                Log(LogLevel.Error, commandExecution.Id,
+                    string.Format("Exception with message {0} raised during executing command with name: {1}",
+                        ex.Message, commandExecution.Command.Name));
+            }
+        }
+
+        private static bool ShouldSimulateException()
+        {
+            var secondsToSimulateException = new[] { 2, 5, 7 };
+            var value = DateTime.UtcNow.Second%10;
+            return secondsToSimulateException.Contains(value);
+        }
+
+        private static void Log(LogLevel level, int executionId, string message)
+        {
+            _clientsHub.Invoke<ExecutionLogEntry>("Log",
+                new ExecutionLogEntry {Level = level, ExecutionId = executionId, Message = message});
         }
 
         private static void PrintCommandExecutionDetails(CommandExecution commandExecution)

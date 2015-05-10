@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Scheduler.Common;
 using Scheduler.Common.DataAccess;
+using Scheduler.Common.Logging;
 using Scheduler.Server.Services;
 
 namespace Scheduler.Server.SignalR
@@ -17,6 +18,8 @@ namespace Scheduler.Server.SignalR
             new Lazy<IClientsManager>(() => new ClientsManager());
         private static readonly Lazy<IConnectedClientsRegistry> ConnectedClientsRegistry =
             new Lazy<IConnectedClientsRegistry>(() => new ConnectedClientsRegistry());
+
+        private static readonly Lazy<ILogger> Logger = new Lazy<ILogger>(() => new ServiceLogger());
 
         /// <summary>
         /// This is called by all web app clients to be able to broadcast easier at a later time
@@ -73,6 +76,11 @@ namespace Scheduler.Server.SignalR
                 await context.SaveChangesAsync().ConfigureAwait(false);
                 Clients.Group(Resources.WepAppClientsGroupName).commandExecutionInfo("finished", commandExecution);
             }
+        }
+
+        public async Task Log(ExecutionLogEntry logEntry)
+        {
+            await Logger.Value.Log(logEntry);
         }
 
         public override Task OnConnected()

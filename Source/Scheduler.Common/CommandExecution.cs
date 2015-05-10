@@ -30,7 +30,7 @@ namespace Scheduler.Common
         /// <summary>
         /// The command that executed
         /// </summary>
-        public MachineCommand Command { get; set; }
+        public virtual MachineCommand Command { get; set; }
 
         /// <summary>
         /// The id of the client the command executed on
@@ -40,7 +40,7 @@ namespace Scheduler.Common
         /// <summary>
         /// The client device the command executed on
         /// </summary>
-        public ClientDevice Client { get; set; }
+        public virtual ClientDevice Client { get; set; }
 
         /// <summary>
         /// When the command started the execution
