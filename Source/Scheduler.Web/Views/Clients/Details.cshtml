@@ -52,6 +52,11 @@
 
             var clientsProxy = connection.createHubProxy('ClientsHub');
 
+            clientsProxy.on('commandExecutionFailed', function (message) {
+                // Display an error toast, with a title
+                toastr.error(message, 'Command execution failed!');
+            });
+
             connection.start()
                 .done(function () {
                     managementProxy.invoke('GetConnectedClients');

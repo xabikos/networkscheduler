@@ -9,33 +9,39 @@ namespace Scheduler.Server.Services
 {
     internal class ClientsManager : IClientsManager
     {
-        private readonly Lazy<IHubContext> _context =
+        private static readonly Lazy<IHubContext> Context =
             new Lazy<IHubContext>(() => GlobalHost.ConnectionManager.GetHubContext<ManagementHub>());
-        private readonly Lazy<IConnectedClientsRegistry> _clientsRegistry =
+        private static readonly Lazy<IConnectedClientsRegistry> ClientsRegistry =
             new Lazy<IConnectedClientsRegistry>(() => new ConnectedClientsRegistry());
-        
+
 
         public bool ClientConnected(ClientDevice client, string connectionId)
         {
             using (var dbContext = new SchedulerContext())
             {
-                if (!dbContext.Clients.Any(c=>c.Name == client.Name))
+                if (!dbContext.Clients.Any(c => c.Name == client.Name))
                 {
                     dbContext.Clients.Add(client);
                     dbContext.SaveChanges();
-                    _context.Value.Clients.All.clientAdded(client);
+                    Context.Value.Clients.All.clientAdded(client);
                 }
-                return _clientsRegistry.Value.RegisterClient(client, connectionId);
+                return ClientsRegistry.Value.RegisterClient(client, connectionId);
             }
         }
 
         public bool ClientDisconected(string connectionId)
         {
-            var clientName =
-                _clientsRegistry.Value.GetConnectedClients().First(c => c.ConnectionId == connectionId).Client.Name;
-            _context.Value.Clients.All.clientDisconected(clientName);
+            // Verify that the disconnected client is network machine and not a web application client
+            var deviceClient = ClientsRegistry.Value.GetConnectedClients().FirstOrDefault(c => c.ConnectionId == connectionId);
+            if (deviceClient != null)
+            {
+                var clientName =
+                    ClientsRegistry.Value.GetConnectedClients().First(c => c.ConnectionId == connectionId).Client.Name;
+                Context.Value.Clients.All.clientDisconected(clientName);
 
-            return _clientsRegistry.Value.RemoveClient(connectionId);
+                return ClientsRegistry.Value.RemoveClient(connectionId);
+            }
+            return true;
         }
 
     }
