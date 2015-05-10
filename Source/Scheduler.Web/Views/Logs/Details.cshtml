@@ -1,0 +1,48 @@
+﻿@using Scheduler.Common
+@model IEnumerable<Scheduler.Common.Logging.ExecutionLogEntry>
+
+@{
+    ViewBag.Title = "Execution Logs";
+}
+
+@{ var commandExecution = (CommandExecution) ViewBag.Execution;}
+<h4>Execution Logs for Command Execution with Id: @commandExecution.Id and Result @commandExecution.Result</h4>
+
+
+<table id="logEntries" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Created
+            </th>
+            <th>
+                Level
+            </th>
+            <th>
+                Message
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var logEntry in Model)
+        {
+            <tr>
+                <td>@logEntry.Id</td>
+                <td>@logEntry.CreatedAt</td>
+                <td>@logEntry.Level</td>
+                <td>@logEntry.Message</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#logEntries').DataTable();
+        });
+    </script>
+}
