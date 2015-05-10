@@ -13,9 +13,12 @@ namespace Scheduler.Client
     class Program
     {
         private static IHubProxy _clientsHub;
+        private static ICommandExecutor _commandExecutor;
 
         static void Main()
-        {            
+        {
+            // HACK As we don't have IoC here we create the instance ourself
+            _commandExecutor = new CommandExecutor();
             //Set connection
             var connection = new HubConnection("http://localhost:8080/");
             //Make proxy to hub based on hub name on server
@@ -58,26 +61,14 @@ namespace Scheduler.Client
         /// </summary>
         private static void SimulateCommandExecution(CommandExecution commandExecution)
         {
-            var startExecution = DateTime.UtcNow;
-
             Log(LogLevel.Verbose, commandExecution.Id,
                 string.Format("Start Executing Command {0} on client with name: {1} at {2}",
-                    commandExecution.Command.Name, Environment.MachineName, startExecution));
+                    commandExecution.Command.Name, Environment.MachineName, DateTime.UtcNow));
 
             try
             {
-                commandExecution.StartExecution = startExecution;
-
-                var rnd = new Random();
-                commandExecution.Result = (ExecutionResult) rnd.Next(0, 2);
-                Task.Delay(rnd.Next(1000, 5000)).Wait();
-
-                if (ShouldSimulateException())
-                {
-                    throw new InvalidOperationException("An exception raised during the command execution");  
-                }
-
-                commandExecution.FinishExecution = DateTime.UtcNow;
+                commandExecution = _commandExecutor.ExecuteCommand(commandExecution);
+                
                 _clientsHub.Invoke<CommandExecution>("ReportCommandResult", commandExecution).ContinueWith(task =>
                 {
                     if (task.IsFaulted)
