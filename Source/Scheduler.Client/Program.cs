@@ -60,7 +60,6 @@ namespace Scheduler.Client
             commandExecution.StartExecution = DateTime.UtcNow;
 
             var rnd = new Random();
-
             commandExecution.Result = (ExecutionResult) rnd.Next(0, 2);
             Task.Delay(rnd.Next(1000, 5000)).Wait();
             

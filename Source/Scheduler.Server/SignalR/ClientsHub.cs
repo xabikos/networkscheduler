@@ -57,9 +57,22 @@ namespace Scheduler.Server.SignalR
             }
         }
 
-        public void ReportCommandResult(CommandExecution commandExecution)
+        public async Task ReportCommandResult(CommandExecution commandExecution)
         {
-            
+            // Update the data for the supplied execution
+            using (var context = new SchedulerContext())
+            {
+                var executionToUpdate = context.CommandsExecutuions.First(ce=>ce.Id == commandExecution.Id);
+                executionToUpdate.Result = commandExecution.Result;
+                executionToUpdate.StartExecution = commandExecution.StartExecution.HasValue
+                    ? commandExecution.StartExecution.Value
+                    : default(DateTime);
+                executionToUpdate.FinishExecution = commandExecution.FinishExecution.HasValue
+                    ? commandExecution.FinishExecution.Value
+                    : default(DateTime);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                Clients.Group(Resources.WepAppClientsGroupName).commandExecutionInfo("finished", commandExecution);
+            }
         }
 
         public override Task OnConnected()

@@ -52,12 +52,26 @@
 
             var clientsProxy = connection.createHubProxy('ClientsHub');
 
-            clientsProxy.on('commandExecutionInfo', function(state, message) {
+            clientsProxy.on('commandExecutionInfo', function(state, data) {
                 if (state === 'started') {
-                    toastr.success('The command with name: ' + message.Command.Name + ' was successfully sent to the client machine', 'Command execution started');
+                    toastr.success('The command with name: ' + data.Command.Name + ' was successfully sent to the client machine', 'Command execution started');
                 } else if (state === 'failed') {
-                    // Display an error toast, with a title
-                    toastr.error(message, 'Command execution failed!');
+                    toastr.error(data, 'Sending command execution failed!');
+                } else if (state === 'finished') {
+                    switch(data.Result) {
+                        case 0:
+                            toastr.success('The command with name: ' + data.Command.Name + 
+                                            ' was successfully executed on the client machine', 'Command executed successfully');
+                            break;
+                        case 1:
+                            toastr.warning('The command with name: ' + data.Command.Name +
+                                            ' is still pending on the client machine', 'Command is pending');
+                            break;
+                        case 2:
+                            toastr.error('The command with name: ' + data.Command.Name + 
+                                            ' was executed with errors on the client machine', 'Command executed with errors');
+                            break;
+                    }
                 }
             });
 
