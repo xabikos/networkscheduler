@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Owin.Hosting;
 using Scheduler.Server.SignalR;
 
@@ -20,20 +18,6 @@ namespace Scheduler.Server
                 Console.WriteLine("Server running at http://localhost:8080/");
                 Console.ReadLine();
             }
-        }
-    }
-
-    [HubName("CustomHub")]
-    public class MyHub : Hub
-    {
-        public string Send(string message)
-        {
-            return message;
-        }
-
-        public void DoSomething(string param)
-        {
-            Clients.All.addMessage(param);
         }
     }
 }
