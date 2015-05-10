@@ -26,7 +26,7 @@ namespace Scheduler.Server.SignalR
             await Groups.Add(Context.ConnectionId, Resources.WepAppClientsGroupName);
         }
 
-        public void ExecuteCommand(int id, int commandId)
+        public async Task ExecuteCommand(int id, int commandId)
         {
             // The client to execute command on is not connected any more so report to the caller that the command didn't executed
             var connectedClient =
@@ -51,7 +51,7 @@ namespace Scheduler.Server.SignalR
                     Result = ExecutionResult.Pending
                 };
                 context.CommandsExecutuions.Add(commandExecution);
-                context.SaveChanges();
+                await context.SaveChangesAsync().ConfigureAwait(false);
                 Clients.Client(connectionId).executeCommand(commandExecution);
                 Clients.Group(Resources.WepAppClientsGroupName).commandExecutionInfo("started", commandExecution);
             }
