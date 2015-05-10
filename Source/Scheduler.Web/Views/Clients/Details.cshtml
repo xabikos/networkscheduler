@@ -27,8 +27,8 @@
                 <td>@command.Name</td>
                 <td>@command.Category</td>
                 <td>
-                    @Html.ActionLink("Trigger", "TriggerCommand", null, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Schedule", "ScheduleCommand", null, new { @class = "btn btn-default btn-primary" })
+                    @Html.ActionLink("Trigger", command.Id.ToString(), null, new { @class = "btn btn-default manualCommand" })
+                    @Html.ActionLink("Schedule", "", null, new { @class = "btn btn-default btn-primary scheduleCommand" })
                 </td>
             </tr>
         }
@@ -38,16 +38,11 @@
 @section scripts{
     <script type="text/javascript">
         $(function () {
-
-            $('#commands').DataTable({
-                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                }
-            });
-
+        
             var connection = $.hubConnection('http://localhost:8080/');
-            var proxy = connection.createHubProxy('ManagementHub');
+            var managementProxy = connection.createHubProxy('ManagementHub');
 
-            proxy.on('connectedClients', function (connectedClients) {
+            managementProxy.on('connectedClients', function (connectedClients) {
                 connectedClients.forEach(function(cl) {
                     if (cl === '@Model.Name') {
                         $('#clientStatus').html('Status: Connected');
@@ -55,11 +50,20 @@
                 });
             });
 
+            var clientsProxy = connection.createHubProxy('ClientsHub');
+
             connection.start()
                 .done(function () {
-                    proxy.invoke('GetConnectedClients');
+                    managementProxy.invoke('GetConnectedClients');
                 })
-                .fail(function() { alert("Could not Connect!"); });
+                .fail(function () { alert("Could not Connect!"); });
+
+            $('a.manualCommand').on('click', function(e) {
+                e.preventDefault();
+                var urlChunks = e.target.pathname.split('/');
+                var commandId = urlChunks[urlChunks.length - 1];
+                clientsProxy.invoke('ExecuteCommand', '@Model.Id', commandId);
+            });
         });
     </script>
 }
