@@ -41,7 +41,7 @@
         $(function () {
 
             var clientsTable = $('#clients').DataTable({
-                "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     $('td:eq(0)', nRow).html(iDisplayIndex);
                     if (aData[3] === "Connected") {
                         $('td:eq(3)', nRow).html('Connected');
@@ -64,18 +64,17 @@
                 });
             });
 
-            connection.start()
-                .done(function () {
-
-                })
-                .fail(function () { alert("Could not Connect!"); });
-
-            $("#broadcast").click(function () {
-                proxy.invoke('Publish', $("#dataToSend").val(), 'Product');
+            proxy.on('connectedClients', function (connectedClients) {
+                connectedClients.forEach(function(cl) {
+                    console.log(cl);
+                });
             });
 
-            
-
+            connection.start()
+                .done(function () {
+                    proxy.invoke('GetConnectedClients');
+                })
+                .fail(function() { alert("Could not Connect!"); });
         });
     </script>
 }

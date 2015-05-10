@@ -99,6 +99,7 @@
     <Compile Include="Services\IConnectedClientsRegistry.cs" />
     <Compile Include="Services\IScheduleCommandsService.cs" />
     <Compile Include="MachineCommand.cs" />
+    <Compile Include="SignalR\DependencyContext.cs" />
     <Compile Include="SignalR\ManagementHub.cs" />
     <Compile Include="SignalR\ClientsHub.cs" />
     <Compile Include="SignalR\ScheduleCommandsHub.cs" />

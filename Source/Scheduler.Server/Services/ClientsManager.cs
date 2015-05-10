@@ -13,10 +13,12 @@ namespace Scheduler.Server.Services
             new Lazy<IHubContext>(() => GlobalHost.ConnectionManager.GetHubContext<ManagementHub>());
         
         private readonly IConnectedClientsRegistry _clientsRegistry;
+        private readonly ManagementHub _managementHub;
 
-        public ClientsManager(IConnectedClientsRegistry clientsRegistry)
+        public ClientsManager(IConnectedClientsRegistry clientsRegistry, ManagementHub managementHub)
         {
             _clientsRegistry = clientsRegistry;
+            _managementHub = managementHub;
         }
 
 
@@ -28,7 +30,8 @@ namespace Scheduler.Server.Services
                 {
                     dbContext.Clients.Add(client);
                     dbContext.SaveChanges();
-                    _context.Value.Clients.All.clientAdded(client);
+                    _managementHub.ClientAdded(client);
+                    //_context.Value.Clients.All.clientAdded(client);
                 }
                 return _clientsRegistry.RegisterClient(client, connectionId);
             }

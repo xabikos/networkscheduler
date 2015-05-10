@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 
 namespace Scheduler.Client
@@ -18,8 +15,8 @@ namespace Scheduler.Client
             var connection = new HubConnection("http://localhost:8080/");
             //Make proxy to hub based on hub name on server
             var myHub = connection.CreateHubProxy("ClientsHub");
-            connection.Headers.Add("authToken", Environment.MachineName);
-            //connection.Headers.Add("authToken", Guid.NewGuid().ToString());
+            //connection.Headers.Add("authToken", Environment.MachineName);
+            connection.Headers.Add("authToken", Guid.NewGuid().ToString());
             if (NetworkInterface.GetIsNetworkAvailable())
             {
                 var host = Dns.GetHostEntry(Dns.GetHostName());

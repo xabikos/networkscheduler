@@ -8,11 +8,6 @@ namespace Scheduler.Common
     public class ConnectedClient
     {
         /// <summary>
-        /// The id of the entity
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// The connection Id between the server and the client
         /// </summary>
         public string ConnectionId { get; set; }
