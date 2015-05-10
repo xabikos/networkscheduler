@@ -14,15 +14,6 @@ namespace Scheduler.Server.Services
         private readonly Lazy<IConnectedClientsRegistry> _clientsRegistry =
             new Lazy<IConnectedClientsRegistry>(() => new ConnectedClientsRegistry());
         
-        //private readonly IConnectedClientsRegistry _clientsRegistry;
-        //private readonly ManagementHub _managementHub;
-
-        public ClientsManager()
-        {
-            //_clientsRegistry = clientsRegistry;
-            //_managementHub = managementHub;
-        }
-
 
         public bool ClientConnected(ClientDevice client, string connectionId)
         {
@@ -32,7 +23,6 @@ namespace Scheduler.Server.Services
                 {
                     dbContext.Clients.Add(client);
                     dbContext.SaveChanges();
-                    //_managementHub.ClientAdded(client);
                     _context.Value.Clients.All.clientAdded(client);
                 }
                 return _clientsRegistry.Value.RegisterClient(client, connectionId);

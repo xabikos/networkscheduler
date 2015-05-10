@@ -13,13 +13,7 @@ namespace Scheduler.Server.SignalR
     {
         private readonly Lazy<IClientsManager> _clientsManager =
             new Lazy<IClientsManager>(() => new ClientsManager());
-        //private readonly IClientsManager _clientsManager;
-
-        public ClientsHub()
-        {
-            //_clientsManager = clientsManager;
-        }
-
+        
         public override Task OnConnected()
         {
             var clientName = Context.Headers["authToken"];

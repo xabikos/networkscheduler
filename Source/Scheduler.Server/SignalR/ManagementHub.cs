@@ -14,13 +14,7 @@ namespace Scheduler.Server.SignalR
 
         private readonly Lazy<IConnectedClientsRegistry> _connectedClientsRegistry =
             new Lazy<IConnectedClientsRegistry>(() => new ConnectedClientsRegistry());
-        //private readonly IConnectedClientsRegistry _connectedClientsRegistry;
-
-        //public ManagementHub()
-        //{
-        //    _connectedClientsRegistry = connectedClientsRegistry;
-        //}
-
+        
         public void GetConnectedClients()
         {
             var enumerable = _connectedClientsRegistry.Value.GetConnectedClients().Select(cc => cc.Client.Name);
