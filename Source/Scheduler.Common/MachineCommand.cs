@@ -23,10 +23,5 @@ namespace Scheduler.Common
         /// </summary>
         public MachineCommandCategory Category { get; set; }
 
-        /// <summary>
-        /// The executions of the specific command
-        /// </summary>
-        public ICollection<CommandExecution> Executions { get; set; }
-
     }
 }

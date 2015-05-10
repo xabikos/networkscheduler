@@ -100,6 +100,7 @@
     <Compile Include="SignalR\DependencyContext.cs" />
     <Compile Include="SignalR\ManagementHub.cs" />
     <Compile Include="SignalR\ClientsHub.cs" />
+    <Compile Include="Resources.cs" />
     <Compile Include="SignalR\ScheduleCommandsHub.cs" />
     <Compile Include="SignalR\SignalRSimpleInjectorDependencyResolver.cs" />
     <Compile Include="SignalR\Startup.cs" />

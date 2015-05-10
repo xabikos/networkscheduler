@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Scheduler.Common;
+using Scheduler.Common.DataAccess;
 using Scheduler.Server.Services;
 
 namespace Scheduler.Server.SignalR
@@ -17,15 +18,48 @@ namespace Scheduler.Server.SignalR
         private static readonly Lazy<IConnectedClientsRegistry> ConnectedClientsRegistry =
             new Lazy<IConnectedClientsRegistry>(() => new ConnectedClientsRegistry());
 
+        /// <summary>
+        /// This is called by all web app clients to be able to broadcast easier at a later time
+        /// </summary>
+        public async Task JoinWebApp()
+        {
+            await Groups.Add(Context.ConnectionId, Resources.WepAppClientsGroupName);
+        }
 
         public void ExecuteCommand(int id, int commandId)
         {
             // The client to execute command on is not connected any more so report to the caller that the command didn't executed
-            if (ConnectedClientsRegistry.Value.GetConnectedClients().All(cc => cc.Client.Id != id))
+            var connectedClient =
+                ConnectedClientsRegistry.Value.GetConnectedClients().FirstOrDefault(cc => cc.Client.Id == id);
+            if (connectedClient == null)
             {
-                Clients.Caller.commandExecutionFailed("Client is not reachable at this time");
+                Clients.Caller.commandExecutionInfo("failed", "Client is not reachable at this time");
+                return;
             }
-            //var clientMachineConnectionId = ClientsManager.Value.
+
+            // Get the connectionId for the specific client device
+            var connectionId = connectedClient.ConnectionId;
+            using (var context = new SchedulerContext())
+            {
+                var command = context.Commands.First(c => c.Id == commandId);
+                // Store in the database info about the current execution
+                var commandExecution = new CommandExecution
+                {
+                    ClientId = id,
+                    Command = command,
+                    Type = MachineCommandType.ManualTriggered,
+                    Result = ExecutionResult.Pending
+                };
+                context.CommandsExecutuions.Add(commandExecution);
+                context.SaveChanges();
+                Clients.Client(connectionId).executeCommand(command);
+                Clients.Caller.commandExecutionInfo("started", commandExecution);
+            }
+        }
+
+        public void ReportCommandResult(CommandExecution commandExecution)
+        {
+            
         }
 
         public override Task OnConnected()

@@ -37,12 +37,12 @@
 
 @section scripts{
     <script type="text/javascript">
-        $(function () {
-        
+        $(function() {
+
             var connection = $.hubConnection('http://localhost:8080/');
             var managementProxy = connection.createHubProxy('ManagementHub');
 
-            managementProxy.on('connectedClients', function (connectedClients) {
+            managementProxy.on('connectedClients', function(connectedClients) {
                 connectedClients.forEach(function(cl) {
                     if (cl === '@Model.Name') {
                         $('#clientStatus').html('Status: Connected');
@@ -52,16 +52,22 @@
 
             var clientsProxy = connection.createHubProxy('ClientsHub');
 
-            clientsProxy.on('commandExecutionFailed', function (message) {
-                // Display an error toast, with a title
-                toastr.error(message, 'Command execution failed!');
+            clientsProxy.on('commandExecutionInfo', function(state, message) {
+                if (state === 'started') {
+                    toastr.success('The command with name: ' + message.Command.Name + ' was successfully sent to the client machine', 'Command execution started');
+                } else if (state === 'failed') {
+                    // Display an error toast, with a title
+                    toastr.error(message, 'Command execution failed!');
+                }
             });
 
             connection.start()
-                .done(function () {
+                .done(function() {
                     managementProxy.invoke('GetConnectedClients');
+                    clientsProxy.invoke('JoinWebApp');
                 })
-                .fail(function () { alert("Could not Connect!"); });
+                .fail(function() { alert("Could not Connect!"); });
+
 
             $('a.manualCommand').on('click', function(e) {
                 e.preventDefault();

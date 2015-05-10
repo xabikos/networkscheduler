@@ -52,6 +52,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Scheduler.Common\Scheduler.Common.csproj">
+      <Project>{c9a5ccc0-bd58-48df-b4df-841b8a2320cf}</Project>
+      <Name>Scheduler.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

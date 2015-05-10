@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using Microsoft.AspNet.SignalR.Client;
+using Scheduler.Common;
 
 namespace Scheduler.Client
 {
@@ -52,10 +53,10 @@ namespace Scheduler.Client
             //    }
             //});
 
-            //myHub.On<string>("addMessage", param =>
-            //{
-            //    Console.WriteLine(param);
-            //});
+            myHub.On<CommandExecution>("executeCommand", param =>
+            {
+                Console.WriteLine(param);
+            });
 
             //myHub.Invoke<string>("DoSomething", "I'm doing something!!!").Wait();
 

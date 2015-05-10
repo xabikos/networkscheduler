@@ -19,7 +19,7 @@ namespace Scheduler.Common.DataAccess.MapConfigurations
                 .HasForeignKey(ce => ce.ClientId)
                 .WillCascadeOnDelete(true);
             HasRequired(ce => ce.Command)
-                .WithMany(c => c.Executions)
+                .WithMany()
                 .HasForeignKey(ce => ce.CommandId)
                 .WillCascadeOnDelete(false);
 

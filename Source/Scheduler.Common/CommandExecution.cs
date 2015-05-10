@@ -45,12 +45,12 @@ namespace Scheduler.Common
         /// <summary>
         /// When the command started the execution
         /// </summary>
-        public DateTime StartExecution { get; set; }
+        public DateTime? StartExecution { get; set; }
 
         /// <summary>
         /// When the command finished the execution
         /// </summary>
-        public DateTime FinishExecution { get; set; }
+        public DateTime? FinishExecution { get; set; }
 
     }
 }
