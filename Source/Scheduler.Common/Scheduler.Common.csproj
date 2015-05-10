@@ -53,11 +53,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientDevice.cs" />
+    <Compile Include="CommandExecution.cs" />
     <Compile Include="ConnectedClient.cs" />
     <Compile Include="DataAccess\Configuration.cs" />
+    <Compile Include="DataAccess\MapConfigurations\CommanExecutiondConfiguration.cs" />
+    <Compile Include="DataAccess\MapConfigurations\MachineCommandConfiguration.cs" />
     <Compile Include="DataAccess\MapConfigurations\ClientDeviceConfiguration.cs" />
     <Compile Include="DataAccess\SchedulerContext.cs" />
+    <Compile Include="DataAccess\SchedulerDatabaseInitializer.cs" />
+    <Compile Include="ExecutionResult.cs" />
     <Compile Include="LibraryPackage.cs" />
+    <Compile Include="MachineCommand.cs" />
+    <Compile Include="MachineCommandType.cs" />
+    <Compile Include="MachineCommandCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

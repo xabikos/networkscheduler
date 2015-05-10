@@ -1,11 +1,11 @@
 using System;
 
-namespace Scheduler.Server
+namespace Scheduler.Common
 {
     /// <summary>
     /// The various types of the commands
     /// </summary>
-    public enum MachineCommandType
+    public enum MachineCommandCategory
     {
         UpdateDotNetFramework,
         UpdateWindows,

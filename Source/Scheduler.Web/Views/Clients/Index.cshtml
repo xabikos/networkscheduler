@@ -30,7 +30,8 @@
                 <td>@client.Name</td>
                 <td>@client.IpAddress</td>
                 <td>Getting Status</td>
-                <td></td>
+                <td>
+                </td>
             </tr>
         }
     </tbody>
@@ -48,6 +49,7 @@
                     } else {
                         $('td:eq(3)', nRow).html('Disconnected');
                     }
+                    $('td:eq(4)', nRow).html('<a class="btn btn-default" href="/clients/details/' + aData[1] + '" role="button">Manage</a>');
                 }
             });
 

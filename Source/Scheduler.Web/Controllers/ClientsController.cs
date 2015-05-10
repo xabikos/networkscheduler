@@ -23,5 +23,10 @@ namespace Scheduler.Web.Controllers
             return View(_schedulerContext.Clients);
         }
 
+        public ActionResult Details(string id)
+        {
+            return View(_schedulerContext.Clients.FirstOrDefault(c => c.Name == id));
+        }
+
     }
 }

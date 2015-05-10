@@ -1,34 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace Scheduler.Common
 {
     /// <summary>
-    /// Represents the various client devices
+    /// Represents command that should be executed in a remote machine
     /// </summary>
-    public class ClientDevice
+    public class MachineCommand
     {
         /// <summary>
-        /// The id of the entity
+        /// The id of the command
         /// </summary>
-        [JsonProperty("id")]
         public int Id { get; set; }
-        
+
         /// <summary>
-        /// The name of the device
+        /// The name of the command
         /// </summary>
-        [JsonProperty("name")] 
         public string Name { get; set; }
 
         /// <summary>
-        /// The IP address of the device
+        /// The Category of the command
         /// </summary>
-        [JsonProperty("ipAddress")] 
-        public string IpAddress { get; set; }
+        public MachineCommandCategory Category { get; set; }
 
         /// <summary>
-        /// All the commands have been executed on the device
+        /// The executions of the specific command
         /// </summary>
         public ICollection<CommandExecution> Executions { get; set; }
 

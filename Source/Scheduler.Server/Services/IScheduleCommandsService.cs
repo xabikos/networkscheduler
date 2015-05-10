@@ -1,4 +1,5 @@
 ﻿using System;
+using Scheduler.Common;
 
 namespace Scheduler.Server.Services
 {

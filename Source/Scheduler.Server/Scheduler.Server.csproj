@@ -90,7 +90,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MachineCommandType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ClientsManager.cs" />
@@ -98,7 +97,6 @@
     <Compile Include="Services\IClientsManager.cs" />
     <Compile Include="Services\IConnectedClientsRegistry.cs" />
     <Compile Include="Services\IScheduleCommandsService.cs" />
-    <Compile Include="MachineCommand.cs" />
     <Compile Include="SignalR\DependencyContext.cs" />
     <Compile Include="SignalR\ManagementHub.cs" />
     <Compile Include="SignalR\ClientsHub.cs" />

@@ -7,7 +7,7 @@ namespace Scheduler.Common.DataAccess
     {
         public EntityFrameworkConfiguration()
         {
-            SetDatabaseInitializer( new DropCreateDatabaseIfModelChanges<SchedulerContext>());
+            SetDatabaseInitializer(new SchedulerDatabaseInitializer());
         }
     }
 }
