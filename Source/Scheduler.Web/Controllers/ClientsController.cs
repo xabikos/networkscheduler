@@ -14,7 +14,6 @@ namespace Scheduler.Web.Controllers
             _schedulerContext = schedulerContext;
             // HACK in order to trigger migration of the database
             var dummyAccess = _schedulerContext.Clients.ToList();
-            
         }
 
         // GET: Clients

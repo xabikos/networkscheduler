@@ -5,7 +5,7 @@
     ViewBag.Title = "Client management";
 }
 
-<h4>Configuring client @Model.Name</h4>
+<h4>Configuring client <span id="clientName">@Model.Name</span></h4>
 <h5 id="clientStatus">Status: Disconnected</h5>
 
 <table id="commands" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -27,7 +27,7 @@
                 <td>@command.Name</td>
                 <td>@command.Category</td>
                 <td>
-                    @Html.ActionLink("Trigger", command.Id.ToString(), null, new { @class = "btn btn-default manualCommand" })
+                    @Html.ActionLink("Trigger", command.Id.ToString(), null, new { @class = "btn btn-default manualCommand", data_modelId = Model.Id })
                 </td>
             </tr>
         }
@@ -35,59 +35,6 @@
 </table>
 
 @section scripts{
-    <script type="text/javascript">
-        $(function() {
-
-            var connection = $.hubConnection('http://localhost:8080/');
-            var managementProxy = connection.createHubProxy('ManagementHub');
-
-            managementProxy.on('connectedClients', function(connectedClients) {
-                connectedClients.forEach(function(cl) {
-                    if (cl === '@Model.Name') {
-                        $('#clientStatus').html('Status: Connected');
-                    }
-                });
-            });
-
-            var clientsProxy = connection.createHubProxy('ClientsHub');
-
-            clientsProxy.on('commandExecutionInfo', function(state, data) {
-                if (state === 'started') {
-                    toastr.success('The command with name: ' + data.Command.Name + ' was successfully sent to the client machine', 'Command execution started');
-                } else if (state === 'failed') {
-                    toastr.error(data, 'Sending command execution failed!');
-                } else if (state === 'finished') {
-                    switch(data.Result) {
-                        case 0:
-                            toastr.success('The command with name: ' + data.Command.Name + 
-                                            ' was successfully executed on the client machine', 'Command executed successfully');
-                            break;
-                        case 1:
-                            toastr.warning('The command with name: ' + data.Command.Name +
-                                            ' is still pending on the client machine', 'Command is pending');
-                            break;
-                        case 2:
-                            toastr.error('The command with name: ' + data.Command.Name + 
-                                            ' was executed with errors on the client machine', 'Command executed with errors');
-                            break;
-                    }
-                }
-            });
-
-            connection.start()
-                .done(function() {
-                    managementProxy.invoke('GetConnectedClients');
-                    clientsProxy.invoke('JoinWebApp');
-                })
-                .fail(function() { alert("Could not Connect!"); });
-
-
-            $('a.manualCommand').on('click', function(e) {
-                e.preventDefault();
-                var urlChunks = e.target.pathname.split('/');
-                var commandId = urlChunks[urlChunks.length - 1];
-                clientsProxy.invoke('ExecuteCommand', '@Model.Id', commandId);
-            });
-        });
+    <script src="~/Scripts/clientDetails.js" type="text/javascript">
     </script>
 }
