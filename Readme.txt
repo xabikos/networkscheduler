@@ -23,9 +23,10 @@
 	This is entirely wrong and a basic authentication mechanism should be part of the system. 
 	Then the scheduled based task was not implemented at all.
 	Dependency injection was not implemented on Scheduler Server. I tried to implement dependency injection on Server service but it came out that 
-	is not straight farward because of underlying SignalR technology that is used. I spend, probably, way too much time trying to solve this but I didn't make it work.
+	is not straightforward  because of underlying SignalR technology that is used. I spend, probably, way too much time trying to solve this but I didn't make it work.
 	I am pretty confident that this can be implemented but requires more investigation.
 	The exception handling is absent from the application which is a major issue which should be addressed immediately.
 	There are a lot dependencies to classes and not interfaces something that is not a good design for sure, especially for testing reasons.
 5.General Feedback
 	In general it's an interesting problem to solve but to complete all the requirements you need much more days. 
+	My design document is not even close to consider complete but I am running out of time so I will upload the solution as it is now.
