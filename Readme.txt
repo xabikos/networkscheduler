@@ -15,3 +15,17 @@
 	and the same in the Web.config file of Scheduler.Web project you have to update the Data Source property in line 12 to the server name of your environment
 	<add name="SchedulerConnection" connectionString="Data Source=ULTRABOOK;Initial Catalog=Scheduler;Integrated Security=True;MultipleActiveResultSets=true;" providerName="System.Data.SqlClient" />
 	If in the second step you chnaged the database name then you need to update the Initial Catalog property too.
+	After doing this you can click debug start on Scheduler.Server console application which is the main service of the application and should be stated first.
+	Afterwards you can click debug start for the Scheduler.Web to launch the web application which presents all the stored data and the clients.
+	Then you can start multiple instanes of Scheduler.Client console application to simulate the various machines on the network that the server executes commands on.
+4. Not implement requirements
+	Due to lack of time several requirements was not implemented. Firstly there isn't any authentication or security to none of the subsystems.
+	This is entirely wrong and a basic authentication mechanism should be part of the system. 
+	Then the scheduled based task was not implemented at all.
+	Dependency injection was not implemented on Scheduler Server. I tried to implement dependency injection on Server service but it came out that 
+	is not straight farward because of underlying SignalR technology that is used. I spend, probably, way too much time trying to solve this but I didn't make it work.
+	I am pretty confident that this can be implemented but requires more investigation.
+	The exception handling is absent from the application which is a major issue which should be addressed immediately.
+	There are a lot dependencies to classes and not interfaces something that is not a good design for sure, especially for testing reasons.
+5.General Feedback
+	In general it's an interesting problem to solve but to complete all the requirements you need much more days. 
